@@ -1,0 +1,32 @@
+@import './base.css';
+@import url('https://fonts.cdnfonts.com/css/montserrat');
+@import url('https://fonts.cdnfonts.com/css/chicken-steak');
+
+#app {
+  width: 100%;
+  margin: 0 auto;
+  font-weight: normal;
+  min-height: 100vh;
+
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+h1 {
+  font-family: 'Chicken Steak', sans-serif;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
