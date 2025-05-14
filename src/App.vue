@@ -1,62 +1,38 @@
 <script setup lang="ts">
-import paginaUno from './components/paginaUno.vue'
+import { ref } from 'vue'
+import type { Ref } from 'vue'
+import AireCondicionado from './components/AireCondicionado.vue'
 
-const nextPage = () => {
-  console.log('entra')
-}
+const start: Ref<boolean> = ref(false)
 </script>
 
 <style lang="scss">
-#grid-container {
-  background-image: url('src/assets/leaf-background.jpg');
+#container {
   height: 100%;
 
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  .box {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(8px);
-    border-radius: 35px;
-    padding: 50px;
+  background-color: rgb(244, 255, 226);
 
-    button {
-      transition: 0.3s ease;
-      position: absolute;
-      right: 50px;
-      bottom: 50px;
-
-      border: none;
-      background-color: violet;
-      color: white;
-      font-size: 20px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-
-      &:hover {
-        transition: 0.3s ease;
-        transform: scale(1.1);
-      }
-
-      &:active {
-        transition: 0.3s ease;
-        transform: scale(1);
-      }
+  .portada {
+    h1 {
+      font-size: 200px;
     }
   }
 }
 </style>
 
 <template>
-  <div id="grid-container">
-    <div class="box">
-      <paginaUno></paginaUno>
-      <button class="next" @click="nextPage">Continuar</button>
+  <div id="container">
+    <div class="portada" v-if="start == false">
+      <h1>HUELLA*</h1>
+      <button class="next" @click="() => (start = true)">Comenzar</button>
+    </div>
+    <div class="sigueinte" v-else>
+      <AireCondicionado></AireCondicionado>
     </div>
   </div>
 </template>
