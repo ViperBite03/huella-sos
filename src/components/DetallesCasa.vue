@@ -34,11 +34,8 @@ const preguntas: IPregunta[] = [
 const scroll = ref(null)
 const emit = defineEmits(['nextPage'])
 const respuestas = ref([])
-
 const pushRespuestas = (valor) => {
   respuestas.value.push(valor)
-
-  console.log(respuestas.value)
 }
 
 const nextPage = (index) => {

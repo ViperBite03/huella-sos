@@ -1,59 +1,62 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import Chart from 'chart.js/auto'
 
-const calefaccionData = {
-  labels: ['Eléctrica', 'Gas natural', 'Biomasa', 'Suelo radiante', 'Centralizada', 'Otro'],
+const calefaccion = ref(3125) //= calefaccion y detalles casa
+const aireAcondicionado = ref(600) //= AireAcondicionado y detalles casa
+
+const personalData = {
+  labels: ['Calefacción', 'Aire acondicionado'],
   datasets: [
     {
-      label: 'Consumo Calefacción',
-      data: [600, 1125, 800, 900, 1000, 300], // valores estimados de consumo anual en kWh
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+      label: 'Consumo personal anual:',
+      data: [calefaccion, aireAcondicionado], // *valores estimados de consumo anual en kWh
+      backgroundColor: ['#9be8bb', '#fff48f'],
     },
   ],
 }
 
-const aireData = {
-  labels: ['Portátil', 'Fijo (split)', 'Centralizado', 'Ventilador', 'Otro'],
+const mediaData = {
+  labels: ['Calefacción', 'Aire acondicionado'],
   datasets: [
     {
-      label: 'Consumo Aire Acondicionado',
-      data: [600, 480, 1000, 100, 200], // valores estimados de consumo anual en kWh
-      backgroundColor: ['#FF9F40', '#4BC0C0', '#9966FF', '#C9CBCF', '#FF6384'],
+      label: 'Media española de consumo:',
+      data: [5100, 300], // valores medios reales en kWh según IDAE
+      backgroundColor: ['#9be8bb', '#fff48f'],
     },
   ],
 }
 
 onMounted(() => {
-  const calefCtx = (document.getElementById('calefaccionChart') as HTMLCanvasElement)?.getContext(
-    '2d',
-  )
-  const aireCtx = (document.getElementById('aireChart') as HTMLCanvasElement)?.getContext('2d')
+  const personalCtx = (
+    document.getElementById('calefaccionChart') as HTMLCanvasElement
+  )?.getContext('2d')
+  const mediaCtx = (document.getElementById('aireChart') as HTMLCanvasElement)?.getContext('2d')
 
-  if (calefCtx) {
-    new Chart(calefCtx, {
+  if (personalCtx) {
+    new Chart(personalCtx, {
       type: 'doughnut',
-      data: calefaccionData,
+      data: personalData,
       options: {
         plugins: {
           title: {
             display: true,
-            text: 'Consumo de Calefacción por Tipo',
+            text: `Consumo personal anual: ${calefaccion.value + aireAcondicionado.value} kWh`,
           },
         },
       },
     })
   }
 
-  if (aireCtx) {
-    new Chart(aireCtx, {
+  if (mediaCtx) {
+    new Chart(mediaCtx, {
       type: 'doughnut',
-      data: aireData,
+      data: mediaData,
       options: {
         plugins: {
           title: {
             display: true,
-            text: 'Consumo de Aire Acondicionado por Tipo',
+            text: 'Media española de consumo: 5400 kWh',
           },
         },
       },
@@ -62,28 +65,52 @@ onMounted(() => {
 })
 </script>
 
+<style scoped>
+.contenedor {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+
+  .charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 2rem;
+
+    .chart {
+      width: 300px;
+      height: 300px;
+    }
+  }
+
+  .compara {
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(75, 74, 74);
+  }
+}
+</style>
+
 <template>
-  <div class="charts">
-    <div class="chart">
-      <canvas id="calefaccionChart"></canvas>
+  <div class="contenedor">
+    <div class="charts">
+      <div class="chart">
+        <canvas id="calefaccionChart"></canvas>
+      </div>
+      <div class="chart">
+        <canvas id="aireChart"></canvas>
+      </div>
     </div>
-    <div class="chart">
-      <canvas id="aireChart"></canvas>
+    <div class="compara">
+      {{
+        calefaccion + aireAcondicionado < 5000
+          ? 'Consumes menos que una máquina de hacer hielo'
+          : 'Consumes más que una feria (háztelo mirar)'
+      }}
     </div>
   </div>
 </template>
-
-<style scoped>
-.charts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.chart {
-  width: 300px;
-  height: 300px;
-}
-</style>

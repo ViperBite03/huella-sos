@@ -8,82 +8,69 @@ interface IPregunta {
 
 const preguntas: IPregunta[] = [
   {
-    question: '¿Qué tipo de calefacción utilizas en casa?',
+    question: '¿Qué tipo de aire acondicionado utilizas?',
     answers: [
-      { title: 'Calefacción eléctrica (preguntas, estufas eléctricas, etc.)', value: 1.5 }, // kWh/h aprox.
-      { title: 'Calefacción a gas (gas natural, butano, propano, etc.)', value: 10 }, // kWh/h
-      { title: 'Calefacción de biomasa (pellets, madera, etc.)', value: 8 }, // kWh/h aprox.
-      { title: 'Calefacción por suelo radiante (eléctrico o a gas)', value: 7 }, // kWh/h (aprox. media entre ambas)
-      { title: 'Calefacción centralizada (sistema comunitario)', value: 10 }, // kWh/h por vivienda
-      { title: 'Otro', value: 0.35 }, // kWh/h estimado
-    ],
-  },
-  {
-    question: '¿Tu sistema de calefacción es eficiente?',
-    answers: [
-      { title: '¿Es un sistema de calefacción con etiqueta energética A o superior?', value: -20 }, // % reducción de consumo
+      { title: 'Aire acondicionado portátil (eléctrico)', value: 0.9 }, // ⚡ Potència estimada (kWh/h)
+      { title: 'Aire acondicionado fijo (split o sistema de pared)', value: 1.2 }, // ⚡ Potència estimada
       {
         title:
-          '¿Es un sistema de calefacción de baja temperatura o tecnología eficiente (por ejemplo, bombas de calor, calderas de condensación, etc.)?',
-        value: -40,
-      }, // % reducción aprox.
-    ],
-  },
-  {
-    question: '¿Cuántas horas al día utilizas la calefacción durante los meses fríos?',
-    answers: [
-      { title: '1-2 horas al día', value: 5 }, // kWh/día
-      { title: '3-5 horas al día', value: 10 }, // kWh/día aprox.
-      { title: 'Más de 5 horas al día', value: 22 }, // kWh/día aprox.
-    ],
-  },
-  {
-    question: '¿En qué meses del año utilizas la calefacción?',
-    answers: [
-      { title: 'Octubre - Marzo', value: 12 }, // kWh/día media aprox.
-      { title: 'Solo en invierno (enero - febrero)', value: 9 }, // kWh/día estimado medio
+          'Aire acondicionado centralizado (sistema de climatización central en todo el edificio)',
+        value: 2.5,
+      }, // ⚡ Potència estimada
       {
-        title: 'Todo el año (si usas calefacción para regular temperatura durante todo el año)',
-        value: 15,
-      }, // kWh/día alto (estimado)
+        title: 'Ventilador (si lo usas para refrescar en lugar de aire acondicionado)',
+        value: 0.075,
+      }, // ⚡ Potència estimada
+      { title: 'Otro', value: 0.5 }, // ⚡ Estimació genèrica
     ],
   },
   {
-    question: '¿A qué temperatura mantienes la calefacción?',
+    question: '¿Tu aire acondicionado tiene una buena etiqueta energética?',
     answers: [
-      { title: '18-20°C (baja temperatura)', value: 0 }, // consumo base
-      { title: '21-23°C (temperatura media)', value: 5 }, // % incremento estimado
-      { title: 'Más de 23°C (alta temperatura)', value: 10 }, // % incremento estimado
+      { title: 'Etiqueta energética A o superior (más eficiente)', value: -20 }, // 📊 Ajust percentual (-20%)
+      { title: 'Etiqueta energética B o inferior (menos eficiente)', value: 0 }, // 📊 Sense ajust
+      { title: 'No lo sé / No tiene etiqueta', value: 5 }, // 📊 Ajust percentual (+5%)
     ],
   },
   {
-    question: '¿Tu vivienda tiene buen aislamiento térmico?',
+    question: '¿Cuántas horas al día utilizas el aire acondicionado durante los meses cálidos?',
     answers: [
-      { title: 'Sí, tengo aislamiento en paredes y ventanas', value: -15 }, // % reducción de consumo
-      { title: 'No, mi vivienda no está bien aislada', value: 0 }, // sin reducción
+      { title: '1-2 horas al día', value: 1.5 }, // 📊 Mitjana d'hores (per multiplicar el consum/hora)
+      { title: '3-5 horas al día', value: 4 }, // 📊 Mitjana d'hores
+      { title: 'Más de 5 horas al día', value: 7 }, // 📊 Mitjana d'hores
     ],
   },
   {
-    question: '¿Tienes ventanas de doble cristal o aislamiento adicional en ventanas?',
+    question: '¿En qué meses del año utilizas el aire acondicionado?',
     answers: [
-      { title: 'Sí, tengo ventanas de doble cristal', value: -10 }, // % reducción de consumo
-      { title: 'No, tengo ventanas de un solo cristal', value: 0 }, // sin reducción
+      { title: 'Solo en verano (junio - septiembre)', value: 1 }, // 📊 Multiplicador base
+      { title: 'En primavera y otoño también (en días calurosos)', value: 1.5 }, // 📊 Més mesos → més consum
+      { title: 'Todo el año (para mantener temperatura constante en la vivienda)', value: 2 }, // 📊 Tot l’any → el doble
+    ],
+  },
+  {
+    question: '¿A qué temperatura mantienes el aire acondicionado?',
+    answers: [
+      { title: 'Menos de 22°C (temperatura más eficiente)', value: -10 }, // 📊 Ajust percentual (-10%)
+      { title: 'Entre 22°C y 24°C (temperatura media)', value: 0 }, // 📊 Neutre
+      { title: 'Más de 24°C (temperatura alta, menos eficiente)', value: 5 }, // 📊 Ajust percentual (+5%)
+    ],
+  },
+  {
+    question: '¿Qué tamaño tiene el área que enfrías con el aire acondicionado?',
+    answers: [
+      { title: 'Menos de 20 m²', value: 0.5 }, // 📊 Multiplicador segons mida
+      { title: '20 - 50 m²', value: 1 },
+      { title: '50 - 100 m²', value: 2 },
+      { title: 'Más de 100 m²', value: 3 },
     ],
   },
   {
     question:
-      '¿Tienes persianas, cortinas o estores que ayuden a mantener el calor dentro de la vivienda?',
+      '¿Utilizas algún sistema adicional para refrescar la casa (ventiladores, sistemas de enfriamiento evaporativo, etc.)?',
     answers: [
-      { title: 'Sí', value: -5 }, // % reducción de consumo
+      { title: 'Sí', value: 0.3 }, // ⚡ Potència extra aproximada (kWh/h)
       { title: 'No', value: 0 },
-    ],
-  },
-  {
-    question: 'b',
-    answers: [
-      { title: '', value: 0 },
-      { title: '', value: 0 },
-      { title: '', value: 0 },
     ],
   },
 ]
