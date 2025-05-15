@@ -7,7 +7,16 @@ import AireAcondicionado from './components/AireAcondicionado.vue'
 import Chart from './components/ChartComponent.vue'
 
 const page: Ref<number> = ref(0)
-const calefaccion: Ref<number> = ref(0)
+const calefaccion = ref(0)
+const AC = ref(0)
+
+const setCalefaccion = (valor: number) => {
+  calefaccion.value = valor
+}
+
+const setAC = (valor: number) => {
+  AC.value = valor
+}
 </script>
 
 <style lang="scss">
@@ -65,17 +74,17 @@ const calefaccion: Ref<number> = ref(0)
 
     <div class="siguiente" v-else-if="page === 2">
       <h2>HUELLA*</h2>
-      <Calefaccion @nextPage="() => page++" :valor="calefaccion"></Calefaccion>
+      <Calefaccion @nextPage="() => page++" :setValor="setCalefaccion" />
     </div>
 
     <div class="siguiente" v-else-if="page === 3">
       <h2>HUELLA*</h2>
-      <AireAcondicionado @nextPage="() => page++"></AireAcondicionado>
+      <AireAcondicionado @nextPage="() => page++" :setValor="setAC" />
     </div>
 
     <div class="siguiente" v-else>
       <h2>HUELLA*</h2>
-      <Chart :valor="calefaccion"></Chart>
+      <Chart :calefaccion="calefaccion" :aire="AC" />
     </div>
   </div>
 </template>

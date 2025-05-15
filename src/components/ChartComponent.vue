@@ -1,16 +1,18 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, defineProps } from 'vue'
 import Chart from 'chart.js/auto'
 
-const calefaccion = ref(3125) //= calefaccion y detalles casa
-const aireAcondicionado = ref(600) //= AireAcondicionado y detalles casa
+const props = defineProps<{
+  calefaccion: number
+  aire: number
+}>()
 
 const personalData = {
   labels: ['Calefacción', 'Aire acondicionado'],
   datasets: [
     {
       label: 'Consumo personal anual:',
-      data: [calefaccion, aireAcondicionado], // *valores estimados de consumo anual en kWh
+      data: [props.calefaccion, props.aire], // datos que vienen del padre
       backgroundColor: ['#9be8bb', '#fff48f'],
     },
   ],
@@ -41,7 +43,7 @@ onMounted(() => {
         plugins: {
           title: {
             display: true,
-            text: `Consumo personal anual: ${calefaccion.value + aireAcondicionado.value} kWh`,
+            text: `Consumo personal anual: ${props.calefaccion + props.aire} kWh`,
           },
         },
       },
@@ -107,7 +109,7 @@ onMounted(() => {
     </div>
     <div class="compara">
       {{
-        calefaccion + aireAcondicionado < 5000
+        props.calefaccion + props.aire < 200
           ? 'Consumes menos que una máquina de hacer hielo'
           : 'Consumes más que una feria (háztelo mirar)'
       }}

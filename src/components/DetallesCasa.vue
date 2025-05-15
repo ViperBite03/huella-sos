@@ -41,20 +41,9 @@ const pushRespuestas = (valor) => {
 const nextPage = (index) => {
   if (index == preguntas.length - 1) {
     emit('nextPage')
-    calcularCalefaccion()
   } else {
     scroll.value.style = `transform: translateY(calc(-100vh * ${index + 1}))`
   }
-}
-
-const calcularCalefaccion = () => {
-  const total = respuestas.value[0] * (respuestas.value[2] * respuestas.value[3])
-  const eficiencia = total - (total * respuestas.value[1]) / 100
-  const temperatura = total + (total * respuestas.value[4]) / 100
-
-  const final = eficiencia + temperatura
-
-  return final
 }
 </script>
 

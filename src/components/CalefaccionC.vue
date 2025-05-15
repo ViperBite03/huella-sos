@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 
 interface IPregunta {
   question: string
@@ -10,54 +10,56 @@ const preguntas: IPregunta[] = [
   {
     question: '¿Qué tipo de calefacción utilizas en casa?',
     answers: [
-      { title: 'Calefacción eléctrica (preguntas, estufas eléctricas, etc.)', value: 1.5 }, // kWh/h aprox.
-      { title: 'Calefacción a gas (gas natural, butano, propano, etc.)', value: 10 }, // kWh/h
-      { title: 'Calefacción de biomasa (pellets, madera, etc.)', value: 8 }, // kWh/h aprox.
-      { title: 'Calefacción por suelo radiante (eléctrico o a gas)', value: 7 }, // kWh/h (aprox. media entre ambas)
-      { title: 'Calefacción centralizada (sistema comunitario)', value: 10 }, // kWh/h por vivienda
-      { title: 'Otro', value: 0.35 }, // kWh/h estimado
+      { title: 'Calefacción eléctrica (preguntas, estufas eléctricas, etc.)', value: 1.5 },
+      { title: 'Calefacción a gas (gas natural, butano, propano, etc.)', value: 10 },
+      { title: 'Calefacción de biomasa (pellets, madera, etc.)', value: 8 },
+      { title: 'Calefacción por suelo radiante (eléctrico o a gas)', value: 7 },
+      { title: 'Calefacción centralizada (sistema comunitario)', value: 10 },
+      { title: 'Otro', value: 0.35 },
+      { title: 'No lo sé', value: 0.1 },
     ],
   },
   {
     question: '¿Tu sistema de calefacción es eficiente?',
     answers: [
-      { title: '¿Es un sistema de calefacción con etiqueta energética A o superior?', value: 20 }, // % reducción de consumo
+      { title: '¿Es un sistema de calefacción con etiqueta energética A o superior?', value: 20 },
       {
         title:
           '¿Es un sistema de calefacción de baja temperatura o tecnología eficiente (por ejemplo, bombas de calor, calderas de condensación, etc.)?',
         value: 40,
-      }, // % reducción aprox.
-      {
-        title: 'No',
-        value: 0,
-      }, // % reducción aprox.
+      },
+      { title: 'No', value: 0.1 },
+      { title: 'No lo sé', value: 0.1 },
     ],
   },
   {
     question: '¿Cuántas horas al día utilizas la calefacción durante los meses fríos?',
     answers: [
-      { title: '1-2 horas al día', value: 2 }, // kWh/día
-      { title: '3-5 horas al día', value: 5 }, // kWh/día aprox.
-      { title: 'Más de 5 horas al día', value: 8 }, // kWh/día aprox.
+      { title: '1-2 horas al día', value: 2 },
+      { title: '3-5 horas al día', value: 5 },
+      { title: 'Más de 5 horas al día', value: 8 },
+      { title: 'No lo sé', value: 0.1 },
     ],
   },
   {
     question: '¿En qué meses del año utilizas la calefacción?',
     answers: [
-      { title: 'Octubre - Marzo', value: 6 }, // kWh/día media aprox.
-      { title: 'Solo en invierno (enero - febrero)', value: 2 }, // kWh/día estimado medio
+      { title: 'Octubre - Marzo', value: 6 },
+      { title: 'Solo en invierno (enero - febrero)', value: 2 },
       {
         title: 'Todo el año (si usas calefacción para regular temperatura durante todo el año)',
         value: 12,
-      }, // kWh/día alto (estimado)
+      },
+      { title: 'No lo sé', value: 0.1 },
     ],
   },
   {
     question: '¿A qué temperatura mantienes la calefacción?',
     answers: [
-      { title: '18-20°C (baja temperatura)', value: 0 }, // consumo base
-      { title: '21-23°C (temperatura media)', value: 5 }, // % incremento estimado
-      { title: 'Más de 23°C (alta temperatura)', value: 10 }, // % incremento estimado
+      { title: '18-20°C (baja temperatura)', value: 0.1 },
+      { title: '21-23°C (temperatura media)', value: 5 },
+      { title: 'Más de 23°C (alta temperatura)', value: 10 },
+      { title: 'No lo sé', value: 0.1 },
     ],
   },
 ]
@@ -78,12 +80,18 @@ const nextPage = (index) => {
   }
 }
 
+const props = defineProps<{
+  setValor: (valor: number) => void
+}>()
+
 const calcularCalefaccion = () => {
   const total = respuestas.value[0] * (respuestas.value[2] * respuestas.value[3])
   const eficiencia = total - (total * respuestas.value[1]) / 100
   const temperatura = total + (total * respuestas.value[4]) / 100
 
-  const final = eficiencia + temperatura
+  const final = (eficiencia + temperatura) * 10
+
+  props.setValor(final)
 
   return final
 }
